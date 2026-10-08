@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RoRo ❤️</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{overflow-x:hidden;font-family:'Cairo',sans-serif;background:linear-gradient(135deg,#ff9a9e 0%,#fecfef 50%,#fad0c4 100%);min-height:100vh;position:relative}
+
+/* قلوب متحركة */
+.hearts{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0}
+.heart-fall{position:absolute;top:-60px;animation:fall linear infinite;opacity:0.6}
+@keyframes fall{
+  0%{transform:translateY(0) rotate(0deg);opacity:0}
+  10%{opacity:0.7}
+  90%{opacity:0.7}
+  100%{transform:translateY(110vh) rotate(360deg);opacity:0}
+}
+
+/* الكارت الرئيسي */
+.card{
+  position:relative;
+  z-index:1;
+  max-width:600px;
+  margin:30px auto;
+  background:rgba(255,255,255,0.75);
+  backdrop-filter:blur(20px);
+  -webkit-backdrop-filter:blur(20px);
+  border-radius:35px;
+  padding:40px 25px;
+  border:2px solid rgba(255,255,255,0.9);
+  box-shadow:0 25px 60px rgba(233,30,99,0.25),0 10px 30px rgba(0,0,0,0.1);
+}
+
+/* القلب الكبير */
+.big-heart{
+  font-size:95px;
+  line-height:1;
+  text-align:center;
+  animation:beat 1.5s ease-in-out infinite;
+  filter:drop-shadow(0 10px 20px rgba(233,30,99,0.4));
+}
+@keyframes beat{
+  0%,100%{transform:scale(1)}
+  50%{transform:scale(1.15)}
+}
+
+/* الاسم */
+h1{
+  font-family:'Amiri',serif;
+  font-size:42px;
+  text-align:center;
+  margin:15px 0 8px;
+  background:linear-gradient(135deg,#e91e63,#ff6a95,#e91e63);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  background-clip:text;
+  font-weight:900;
+}
+
+.sub{
+  text-align:center;
+  font-size:16px;
+  color:#8a0f33;
+  opacity:0.8;
+  margin-bottom:25px;
+}
+
+/* رسالة الحب */
+.msg{
+  font-family:'Cairo',sans-serif;
+  font-size:19px;
+  line-height:2.2;
+  color:#5a0a1e;
+  background:rgba(255,255,255,0.6);
+  padding:30px 25px;
+  border-radius:25px;
+  border:2px dashed rgba(233,30,99,0.3);
+  margin-top:25px;
+  white-space:pre-line;
+  text-align:right;
+  position:relative;
+  overflow:hidden;
+  min-height:200px;
+}
+
+.msg::before{
+  content:'💌';
+  position:absolute;
+  top:10px;
+  left:15px;
+  font-size:24px;
+  opacity:0.5;
+}
+
+/* زر الأغنية */
+button{
+  display:block;
+  width:100%;
+  max-width:300px;
+  margin:20px auto;
+  background:linear-gradient(135deg,#e91e63,#ff6a95);
+  color:#fff;
+  border:none;
+  padding:16px 30px;
+  border-radius:50px;
+  font-size:18px;
+  font-family:'Cairo',sans-serif;
+  font-weight:700;
+  cursor:pointer;
+  box-shadow:0 8px 25px rgba(233,30,99,0.4);
+  transition:all 0.3s ease;
+}
+button:hover{
+  transform:translateY(-3px);
+  box-shadow:0 12px 30px rgba(233,30,99,0.5);
+}
+button:active{transform:translateY(0)}
+
+/* الفوتر */
+.footer{
+  text-align:center;
+  margin-top:30px;
+  font-size:20px;
+  font-weight:900;
+  color:#e91e63;
+  font-family:'Amiri',serif;
+}
+
+/* اسم الأغنية */
+.song-title{
+  text-align:center;
+  font-size:15px;
+  color:#8a0f33;
+  opacity:0.7;
+  margin:15px 0 5px;
+  font-style:italic;
+}
+</style>
+</head>
+<body>
+
+<div class="hearts" id="hearts"></div>
+
+<div class="card">
+  <div class="big-heart">❤️</div>
+  <h1>لأجمل RoRo</h1>
+  <div class="sub">🌸 حاجة صغيرة معمولة بحب 🌸</div>
+
+  <div class="song-title">🎶 يا نصيبي اللي أنا بحمد ربنا على إني قابلته 🎶</div>
+  
+  <audio id="song" loop>
+    <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+  </audio>
+
+  <button id="playBtn" onclick="playSong()">▶ شغلي الأغنية 🎵</button>
+
+  <div class="msg" id="msg"></div>
+
+  <div class="footer">مني ليكي ❤️ RoRo</div>
+</div>
+
+<script>
+// قلوب متحركة
+const heartsContainer = document.getElementById('hearts');
+const heartEmojis = ['❤️','💕','💖','💗','💘','🌸','✨','🌹'];
+
+for(let i = 0; i < 25; i++){
+  const el = document.createElement('div');
+  el.className = 'heart-fall';
+  el.textContent = heartEmojis[Math.floor(Math.random() * heartEmojis.length)];
+  el.style.left = Math.random() * 100 + '%';
+  el.style.animationDuration = (5 + Math.random() * 6) + 's';
+  el.style.animationDelay = Math.random() * 8 + 's';
+  el.style.fontSize = (14 + Math.random() * 18) + 'px';
+  heartsContainer.appendChild(el);
+}
+
+// الرسالة
+const fullMessage = `يا RoRo، أنا كنت قايلّك قبل كده إني حاسس إني معجب بيكي... 🥺
+
+بس دلوقتي أنا متأكد 💖
+
+متأكد إن ضحكتك بتفرق معايا، وإن وجودك بيخلي اليوم أحلى، وإن كل مرة بشوفك فيها ببقى عايز أعرفك أكتر 🌹
+
+أنا مش هتسرع، ومش هضغط عليكي، أنا بس حبيت تعرفي إن إعجابي بيكي بقى حقيقي ومش مجرد إحساس ✨`;
+
+// تأثير الكتابة حرف حرف
+const msgElement = document.getElementById('msg');
+let charIndex = 0;
+
+function typeMessage(){
+  if(charIndex < fullMessage.length){
+    msgElement.textContent += fullMessage.charAt(charIndex);
+    charIndex++;
+    setTimeout(typeMessage, 50);
+  }
+}
+
+// تبدأ الكتابة بعد ثانيتين
+setTimeout(typeMessage, 1500);
+
+// تشغيل الأغنية
+function playSong(){
+  const audio = document.getElementById('song');
+  const btn = document.getElementById('playBtn');
+  
+  if(audio.paused){
+    audio.play().catch(e => {
+      btn.textContent = '⚠️ حط ملف song.mp3 جنب الملف';
+      setTimeout(() => { btn.textContent = '▶ شغلي الأغنية 🎵'; }, 2000);
+    });
+    btn.textContent = '⏸ وقفي الأغنية';
+  } else {
+    audio.pause();
+    btn.textContent = '▶ شغلي الأغنية 🎵';
+  }
+}
+</script>
+
+</body>
+</html>
